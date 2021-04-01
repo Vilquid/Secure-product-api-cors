@@ -6,26 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+
+@CrossOrigin(origins = "http://localhost:5000")
 @RestController
 @RequestMapping("/api/products")
-public class ProductController {
+public class ProductController
+{
+	@Autowired
+	private ProductService productService;
 
-    @Autowired
-    private ProductService productService;
+	@GetMapping
+	public List<Product> getAll()
+	{
+		return productService.getAllProducts();
+	}
 
-    @GetMapping
-    public List<Product> getAll() {
-        return productService.getAllProducts();
-    }
+	@PostMapping
+	public ResponseEntity<String> createProduct(@RequestBody Product product)
+	{
+		productService.createProduct(product);
 
-    @PostMapping
-    public ResponseEntity<String> createProduct(@RequestBody Product product) {
-        productService.createProduct(product);
-        return new ResponseEntity<String>("Product created successfully",
-                                          HttpStatus.OK);
-    }
-
+		return new ResponseEntity<String>("Product created successfully", HttpStatus.OK);
+	}
 }
